@@ -245,6 +245,10 @@ const App: FC = () => {
         renderOptions={{
           whenVisibleOnly: true,
         }}
+        style={{
+          height: '100vh',
+          width: '100vw',
+        }}
       >
         <Scene>
           {/* <freeCamera
