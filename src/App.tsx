@@ -10,13 +10,9 @@ import {
 } from '@babylonjs/core';
 import hdrImageTexture from './test.hdr';
 
-const RotatingBox: FC<{ pos: Vector3; rpm: number; base: any }> = memo(
+const Orb: FC<{ pos: Vector3; rpm: number; base: Mesh }> = memo(
   ({ pos, rpm, base }) => {
-    const scene = useScene();
-    const ref = useRef<Mesh | null>(null);
-
-    const [y, setY] = useState(0);
-    // const [s, setS] = useState(1);
+    // const [y, setY] = useState(0);
     // useBeforeRender(() => {
     // console.log('before render apply position', pos);
     // if (ref.current) ref.current.position = pos;
@@ -33,13 +29,8 @@ const RotatingBox: FC<{ pos: Vector3; rpm: number; base: any }> = memo(
     // console.log('rendering box', { y, s });
 
     const inst = useMemo(() => {
-      if (!base) return null;
-      const inst = base.createInstance('box' + Math.random());
-      // inst.position = pos;
-      return inst;
+      return base.createInstance('box' + Math.random());
     }, [base]);
-
-    // if (!base) return null;
 
     // console.log('rendering box', { y, pos, base });
     return (
@@ -57,36 +48,37 @@ const RotatingBox: FC<{ pos: Vector3; rpm: number; base: any }> = memo(
       /> */}
       </instancedMesh>
     );
-    return (
-      <box
-        name="box"
-        size={1}
-        position={pos}
-        // rotation={new Vector3(0, y, 0)}
-        //fromInstance={}
-      >
-        <pbrMaterial
-          name="glass"
-          alpha={0.5}
-          directIntensity={0.0}
-          indexOfRefraction={0.52}
-          cameraExposure={0.66}
-          reflectivityColor={new Color3(0.2, 0.2, 0.2)}
-          albedoColor={new Color3(0.95, 0.95, 0.95)}
-        >
-          <hdrCubeTexture
-            name="skybox"
-            url={hdrImageTexture}
-            size={512}
-            coordinatesMode={0}
-          />
-        </pbrMaterial>
-      </box>
-    );
+    // return (
+    //   <box
+    //     name="box"
+    //     size={1}
+    //     position={pos}
+    //     // rotation={new Vector3(0, y, 0)}
+    //     //fromInstance={}
+    //   >
+    //     <pbrMaterial
+    //       name="glass"
+    //       alpha={0.5}
+    //       directIntensity={0.0}
+    //       indexOfRefraction={0.52}
+    //       cameraExposure={0.66}
+    //       reflectivityColor={new Color3(0.2, 0.2, 0.2)}
+    //       albedoColor={new Color3(0.95, 0.95, 0.95)}
+    //     >
+    //       <hdrCubeTexture
+    //         name="skybox"
+    //         url={hdrImageTexture}
+    //         size={512}
+    //         coordinatesMode={0}
+    //       />
+    //     </pbrMaterial>
+    //   </box>
+    // );
   }
 );
 
 const SPREAD = 100;
+const INITIAL_NUM_OBJECTS = 5000;
 
 const generateInitialPos = (size = 1000, max = SPREAD) => {
   const pos = [];
@@ -100,7 +92,7 @@ const generateInitialPos = (size = 1000, max = SPREAD) => {
 
 const Objects = () => {
   const [objectsPos, setObjectsPos] = useState<Vector3[]>(
-    generateInitialPos(5000, 50)
+    generateInitialPos(INITIAL_NUM_OBJECTS, SPREAD)
   );
 
   useEffect(() => {
@@ -154,10 +146,12 @@ const Objects = () => {
     return baseSphere;
   }, [scene]);
 
+  if (!base) return null;
+
   return (
     <transformNode name="gaga">
       {objectsPos.map((pos, i) => (
-        <RotatingBox key={i} pos={pos} rpm={5} base={base} />
+        <Orb key={i} pos={pos} rpm={5} base={base} />
       ))}
     </transformNode>
   );
@@ -178,6 +172,7 @@ const Player: FC<{ spawnPoint?: Vector3 }> = ({
       const sphereTransform = sphereTransformRef.current; //.hostInstance;
       sphereTransform.setParent(camera);
       sphereTransform.position = new Vector3(0, -2, 10);
+      // sphereTransform.position = Vector3.FromObject({x: 0, y: -2,z: 10});
     }
 
     // cameraRef.current?.inputs.addMouse();
