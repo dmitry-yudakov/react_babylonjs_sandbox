@@ -43,21 +43,19 @@ const RotatingBox: FC<{ pos: Vector3; rpm: number; base: any }> = memo(
 
     // console.log('rendering box', { y, pos, base });
     return (
-      <mesh
-        // ref={ref}
+      <instancedMesh
         name={'box' + Math.random()}
-        fromInstance={base}
-        // fromInstance={inst}
+        fromInstance={inst}
+        source={base}
         position={pos}
         disposeInstanceOnUnmount
       >
-        {/* <transformNode name="sphereTransform" position={pos} /> */}
         {/* <standardMaterial
         name="material"
         diffuseColor={Color3.Yellow()}
         specularColor={Color3.Black()}
       /> */}
-      </mesh>
+      </instancedMesh>
     );
     return (
       <box
