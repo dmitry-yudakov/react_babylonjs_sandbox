@@ -28,15 +28,10 @@ const Orb: FC<{ pos: Vector3; rpm: number; base: Mesh }> = memo(
     // });
     // console.log('rendering box', { y, s });
 
-    const inst = useMemo(() => {
-      return base.createInstance('box' + Math.random());
-    }, [base]);
-
     // console.log('rendering box', { y, pos, base });
     return (
       <instancedMesh
         name={'box' + Math.random()}
-        fromInstance={inst}
         source={base}
         position={pos}
         disposeInstanceOnUnmount
