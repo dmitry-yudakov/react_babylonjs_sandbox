@@ -97,15 +97,17 @@ const Objects = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setObjectsPos((oldPos) => [
-        ...oldPos,
-        new Vector3(
-          Math.random() * SPREAD,
-          Math.random() * SPREAD,
-          Math.random() * SPREAD
-        ),
-      ]);
-    }, 1000);
+      setObjectsPos((oldPos) =>
+        [
+          ...oldPos,
+          new Vector3(
+            Math.random() * SPREAD,
+            Math.random() * SPREAD,
+            Math.random() * SPREAD
+          ),
+        ].slice(1, INITIAL_NUM_OBJECTS + 1)
+      );
+    }, 100);
     return () => clearInterval(interval);
   }, []);
 
